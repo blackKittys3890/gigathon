@@ -358,13 +358,13 @@ def next_step():
     else:
         arena()
 
-def friend():
+def friend(x):
     if x >= 5:
-        friend = "Rocko"
+        return "Rocko"
     elif x <= 0:
-        friend = "Ash"
+        return "Ash"
     else:
-        friend = "Misty"
+        return "Misty"
 
 def arena():
     print("\nDu betrittst die Arena...")
@@ -386,7 +386,8 @@ def startup():
         try:
             x = int(input("x: "))
             y = int(input("y: "))
-            print (f"\nDu startest bei den Koordinaten ({x}, {y}).")
+            friend(x)
+            print(f"Dein Trainer ist {friend(x)}")
             break
         except ValueError:
             print("Bitte gib nur Zahlen ein. Neuer Versuch.")

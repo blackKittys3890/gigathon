@@ -31,8 +31,10 @@ def starter_pokemon():
     starter = starters[choice - 1]
 
     box.append(starter)
+    player["starter"] = starter["name"]
 
     print(f"\nDu hast {starter['name']} als dein Starter-Pokémon gewählt!")
+    return starter
 
 def find_pokemon():
 
@@ -310,16 +312,29 @@ def heal_pokemon():
 
     bag.remove(item)
 
-def random_events():
-    event = random.choice(["pokemon", "item", "nothing"])
+def random_events(friend_name):
+
+    if friend_name == "Misty":
+        events = ["item", "item", "pokemon", "self"]
+
+    elif friend_name == "Ash":
+        events = ["pokemon", "pokemon", "item", "self"]
+
+    else:  # Rocko
+        events = ["item", "pokemon", "self", "self"]
+
+    event = random.choice(events)
 
     if event == "pokemon":
         if len(box) == 6:
-            print("\nDein Box ist voll! Du kannst kein neues Pokémon fangen.")
+            print("\nDeine Box ist voll! Du kannst kein neues Pokémon fangen.")
             find_item()
-        find_pokemon()
+        else:
+            find_pokemon()
+
     elif event == "item":
         find_item()
+
     else:
         next_step()
 
@@ -361,11 +376,11 @@ def next_step():
 
 def friend(x):
     if x >= 5:
-        return "Rocko" # Findet Tränke
+        return "Rocko" # Fördert Eigenentscheidung
     elif x <= 0:
-        return "Ash" # Findet manchmal Pokemon
+        return "Ash" # Fördert Pokemons fangen
     else:
-        return "Misty" # Ist
+        return "Misty" # Fördert Items finden
 
 def arena():
     print("\nDu betrittst die Arena...")
@@ -418,12 +433,26 @@ def startup():
             print("Bitte gib nur Zahlen ein. Neuer Versuch.")
             
     player["geld"] = money
+    player["name"] = trainer_name
+    player["trainer"] = friend(x)
+    player["difficulty"] = difficulty
+    starter = starter_pokemon()
+    player["starter"] = starter["name"]
+    player["arena_badges"] = 3
 
     print("Viel Spaß auf deiner Reise!\n")
     return trainer_name
 
 def abschluss(trainer_name):
+    print("\n===== SPIELZUSAMMENFASSUNG =====")
+    
+    
+    for key, value in player.items():
+        print(f"{key}: {value}")
+    
     print(f"Danke {trainer_name} fürs Spielen!")
+    print(f"Du hast {len(box)} Pokémon gefangen und {len(bag)} Items gesammelt.")
+    print(f"Dein Geld: {player['geld']}")
 
 # Test
 # Game logik

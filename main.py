@@ -15,7 +15,18 @@ def starter_pokemon():
     for i, pokemon in enumerate(starters, start=1):
         print(f"{i}. {pokemon['name']} - KP: {pokemon['health']}")
 
-    choice = int(input("\nDeine Wahl: "))
+    while True:
+        try:
+            choice = int(input("\nDeine Wahl (1-3): "))
+
+            if choice < 1 or choice > 3:
+                print("Bitte gib nur eine Zahl zwischen 1 und 3 ein. Neuer Versuch.")
+            else:
+                break 
+
+        except ValueError:
+            print("Bitte gib nur Zahlen ein. Neuer Versuch.")
+
     starter = starters[choice - 1]
 
     box.append(starter)
@@ -309,9 +320,82 @@ def random_events():
     elif event == "item":
         find_item()
     else:
-        print("\nEs ist nichts passiert...")
+        next_step()
+
+def next_step():
+    actions_list = [
+        {"name": "Pokeom heilen"},
+        {"name": "Pokemon fangen"},
+        {"name": "weiter gehen"}
+    ]
+
+    print("Was ist deine nächste aktion?")
+
+    for i, action in enumerate(actions_list, start=1):
+        print(f"{i}. {action['name']}")
+
+    while True:
+        try:
+            choice = int(input("\nDeine Wahl (1-3): "))
+
+            if choice < 1 or choice > 3:
+                print("Bitte gib nur eine Zahl zwischen 1 und 3 ein. Neuer Versuch.")
+            else:
+                break 
+
+        except ValueError:
+            print("Bitte gib nur Zahlen ein. Neuer Versuch.")
+
+    actions = actions_list[choice - 1]
+
+    if actions["name"] == "Pokeom heilen":
+        heal_pokemon()
+    elif actions["name"] == "Pokemon fangen":
+        if len(box) == 6:
+            print("\nDein Box ist voll! Du kannst kein neues Pokémon fangen.")
+            next_step()
+        find_pokemon()
+    else:
+        arena()
+
+def friend():
+    if x >= 5:
+        friend = "Rocko"
+    elif x <= 0:
+        friend = "Ash"
+    else:
+        friend = "Misty"
+
+def arena():
+    print("\nDu betrittst die Arena...")
+
+def startup():
+    print("Willkommen zu Pokémon!")
+    print("Du bist ein Trainer und dein Ziel ist es, der beste Pokémon-Trainer zu werden.")
+    print("Fange Pokémon, sammle Items und heile deine Pokémon, um stärker zu werden.")
+    print("Wenn du eine Arena nicht schaffst hast du verloren")
+
+    print("Bevor wir starten, wie ist dein Name?")
+    trainer_name = input("Dein Name: ")
+
+    print(f"\nHallo {trainer_name}!")
+    starter_pokemon()
+
+    print("Wo möchtest du starten? (x, y)")
+    while True:
+        try:
+            x = int(input("x: "))
+            y = int(input("y: "))
+            print (f"\nDu startest bei den Koordinaten ({x}, {y}).")
+            break
+        except ValueError:
+            print("Bitte gib nur Zahlen ein. Neuer Versuch.")
+
+
+
+    print("Viel Spaß auf deiner Reise!\n")
 
 # Test
 # Game logik
-starter_pokemon()
-random_events()
+startup()
+

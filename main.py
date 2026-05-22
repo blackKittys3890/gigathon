@@ -23,13 +23,234 @@ def starter_pokemon():
     print(f"\nDu hast {starter['name']} als dein Starter-Pokémon gewählt!")
 
 def find_pokemon():
+
     pokemon_team = [
-        {"name": "Pikachu", "health": 35},
-        {"name": "Glurak", "health": 120},
-        {"name": "Bisasam", "health": 45}
+
+        {"name": "Bisasam", "health": 45, "typ": "Pflanze", "typ2": "Gift", "evolution_stage": 1},
+        {"name": "Bisaknosp", "health": 60, "typ": "Pflanze", "typ2": "Gift", "evolution_stage": 2},
+        {"name": "Bisaflor", "health": 80, "typ": "Pflanze", "typ2": "Gift", "evolution_stage": 3},
+
+        {"name": "Glumanda", "health": 39, "typ": "Feuer", "typ2": None, "evolution_stage": 1},
+        {"name": "Glutexo", "health": 58, "typ": "Feuer", "typ2": None, "evolution_stage": 2},
+        {"name": "Glurak", "health": 78, "typ": "Feuer", "typ2": "Flug", "evolution_stage": 3},
+
+        {"name": "Schiggy", "health": 44, "typ": "Wasser", "typ2": None, "evolution_stage": 1},
+        {"name": "Schillok", "health": 59, "typ": "Wasser", "typ2": None, "evolution_stage": 2},
+        {"name": "Turtok", "health": 79, "typ": "Wasser", "typ2": None, "evolution_stage": 3},
+
+        {"name": "Raupy", "health": 45, "typ": "Käfer", "typ2": None, "evolution_stage": 1},
+        {"name": "Safcon", "health": 50, "typ": "Käfer", "typ2": None, "evolution_stage": 2},
+        {"name": "Smettbo", "health": 60, "typ": "Käfer", "typ2": "Flug", "evolution_stage": 3},
+
+        {"name": "Hornliu", "health": 40, "typ": "Käfer", "typ2": "Gift", "evolution_stage": 1},
+        {"name": "Kokuna", "health": 45, "typ": "Käfer", "typ2": "Gift", "evolution_stage": 2},
+        {"name": "Bibor", "health": 65, "typ": "Käfer", "typ2": "Gift", "evolution_stage": 3},
+
+        {"name": "Taubsi", "health": 40, "typ": "Normal", "typ2": "Flug", "evolution_stage": 1},
+        {"name": "Tauboga", "health": 63, "typ": "Normal", "typ2": "Flug", "evolution_stage": 2},
+        {"name": "Tauboss", "health": 83, "typ": "Normal", "typ2": "Flug", "evolution_stage": 3},
+
+        {"name": "Rattfratz", "health": 30, "typ": "Normal", "typ2": None, "evolution_stage": 1},
+        {"name": "Rattikarl", "health": 55, "typ": "Normal", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Habitak", "health": 40, "typ": "Normal", "typ2": "Flug", "evolution_stage": 1},
+        {"name": "Ibitak", "health": 65, "typ": "Normal", "typ2": "Flug", "evolution_stage": 2},
+
+        {"name": "Rettan", "health": 35, "typ": "Gift", "typ2": None, "evolution_stage": 1},
+        {"name": "Arbok", "health": 60, "typ": "Gift", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Pikachu", "health": 35, "typ": "Elektro", "typ2": None, "evolution_stage": 1},
+        {"name": "Raichu", "health": 60, "typ": "Elektro", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Sandan", "health": 50, "typ": "Boden", "typ2": None, "evolution_stage": 1},
+        {"name": "Sandamer", "health": 75, "typ": "Boden", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Nidoran♀", "health": 55, "typ": "Gift", "typ2": None, "evolution_stage": 1},
+        {"name": "Nidorina", "health": 70, "typ": "Gift", "typ2": None, "evolution_stage": 2},
+        {"name": "Nidoqueen", "health": 90, "typ": "Gift", "typ2": "Boden", "evolution_stage": 3},
+
+        {"name": "Nidoran♂", "health": 46, "typ": "Gift", "typ2": None, "evolution_stage": 1},
+        {"name": "Nidorino", "health": 61, "typ": "Gift", "typ2": None, "evolution_stage": 2},
+        {"name": "Nidoking", "health": 81, "typ": "Gift", "typ2": "Boden", "evolution_stage": 3},
+
+        {"name": "Piepi", "health": 70, "typ": "Fee", "typ2": None, "evolution_stage": 1},
+        {"name": "Pixi", "health": 95, "typ": "Fee", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Vulpix", "health": 38, "typ": "Feuer", "typ2": None, "evolution_stage": 1},
+        {"name": "Vulnona", "health": 73, "typ": "Feuer", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Pummeluff", "health": 115, "typ": "Normal", "typ2": "Fee", "evolution_stage": 1},
+        {"name": "Knuddeluff", "health": 140, "typ": "Normal", "typ2": "Fee", "evolution_stage": 2},
+
+        {"name": "Zubat", "health": 40, "typ": "Gift", "typ2": "Flug", "evolution_stage": 1},
+        {"name": "Golbat", "health": 75, "typ": "Gift", "typ2": "Flug", "evolution_stage": 2},
+
+        {"name": "Myrapla", "health": 45, "typ": "Pflanze", "typ2": "Gift", "evolution_stage": 1},
+        {"name": "Duflor", "health": 60, "typ": "Pflanze", "typ2": "Gift", "evolution_stage": 2},
+        {"name": "Giflor", "health": 75, "typ": "Pflanze", "typ2": "Gift", "evolution_stage": 3},
+
+        {"name": "Paras", "health": 35, "typ": "Käfer", "typ2": "Pflanze", "evolution_stage": 1},
+        {"name": "Parasek", "health": 60, "typ": "Käfer", "typ2": "Pflanze", "evolution_stage": 2},
+
+        {"name": "Bluzuk", "health": 60, "typ": "Käfer", "typ2": "Gift", "evolution_stage": 1},
+        {"name": "Omot", "health": 70, "typ": "Käfer", "typ2": "Gift", "evolution_stage": 2},
+
+        {"name": "Digda", "health": 10, "typ": "Boden", "typ2": None, "evolution_stage": 1},
+        {"name": "Digdri", "health": 35, "typ": "Boden", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Mauzi", "health": 40, "typ": "Normal", "typ2": None, "evolution_stage": 1},
+        {"name": "Snobilikat", "health": 65, "typ": "Normal", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Enton", "health": 50, "typ": "Wasser", "typ2": None, "evolution_stage": 1},
+        {"name": "Entoron", "health": 80, "typ": "Wasser", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Menki", "health": 40, "typ": "Kampf", "typ2": None, "evolution_stage": 1},
+        {"name": "Rasaff", "health": 65, "typ": "Kampf", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Fukano", "health": 55, "typ": "Feuer", "typ2": None, "evolution_stage": 1},
+        {"name": "Arkani", "health": 90, "typ": "Feuer", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Quapsel", "health": 40, "typ": "Wasser", "typ2": None, "evolution_stage": 1},
+        {"name": "Quaputzi", "health": 65, "typ": "Wasser", "typ2": None, "evolution_stage": 2},
+        {"name": "Quappo", "health": 90, "typ": "Wasser", "typ2": "Kampf", "evolution_stage": 3},
+
+        {"name": "Abra", "health": 25, "typ": "Psycho", "typ2": None, "evolution_stage": 1},
+        {"name": "Kadabra", "health": 40, "typ": "Psycho", "typ2": None, "evolution_stage": 2},
+        {"name": "Simsala", "health": 55, "typ": "Psycho", "typ2": None, "evolution_stage": 3},
+
+        {"name": "Machollo", "health": 70, "typ": "Kampf", "typ2": None, "evolution_stage": 1},
+        {"name": "Maschock", "health": 80, "typ": "Kampf", "typ2": None, "evolution_stage": 2},
+        {"name": "Machomei", "health": 90, "typ": "Kampf", "typ2": None, "evolution_stage": 3},
+
+        {"name": "Knofensa", "health": 50, "typ": "Pflanze", "typ2": "Gift", "evolution_stage": 1},
+        {"name": "Ultrigaria", "health": 65, "typ": "Pflanze", "typ2": "Gift", "evolution_stage": 2},
+        {"name": "Sarzenia", "health": 80, "typ": "Pflanze", "typ2": "Gift", "evolution_stage": 3},
+
+        {"name": "Tentacha", "health": 40, "typ": "Wasser", "typ2": "Gift", "evolution_stage": 1},
+        {"name": "Tentoxa", "health": 80, "typ": "Wasser", "typ2": "Gift", "evolution_stage": 2},
+
+        {"name": "Kleinstein", "health": 40, "typ": "Gestein", "typ2": "Boden", "evolution_stage": 1},
+        {"name": "Georok", "health": 55, "typ": "Gestein", "typ2": "Boden", "evolution_stage": 2},
+        {"name": "Geowaz", "health": 80, "typ": "Gestein", "typ2": "Boden", "evolution_stage": 3},
+
+        {"name": "Ponita", "health": 50, "typ": "Feuer", "typ2": None, "evolution_stage": 1},
+        {"name": "Gallopa", "health": 65, "typ": "Feuer", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Flegmon", "health": 90, "typ": "Wasser", "typ2": "Psycho", "evolution_stage": 1},
+        {"name": "Lahmus", "health": 95, "typ": "Wasser", "typ2": "Psycho", "evolution_stage": 2},
+
+        {"name": "Magnetilo", "health": 25, "typ": "Elektro", "typ2": "Stahl", "evolution_stage": 1},
+        {"name": "Magneton", "health": 50, "typ": "Elektro", "typ2": "Stahl", "evolution_stage": 2},
+
+        {"name": "Porenta", "health": 52, "typ": "Normal", "typ2": "Flug", "evolution_stage": 1},
+
+        {"name": "Dodu", "health": 35, "typ": "Normal", "typ2": "Flug", "evolution_stage": 1},
+        {"name": "Dodri", "health": 60, "typ": "Normal", "typ2": "Flug", "evolution_stage": 2},
+
+        {"name": "Jurob", "health": 65, "typ": "Wasser", "typ2": None, "evolution_stage": 1},
+        {"name": "Jugong", "health": 90, "typ": "Wasser", "typ2": "Eis", "evolution_stage": 2},
+
+        {"name": "Sleima", "health": 80, "typ": "Gift", "typ2": None, "evolution_stage": 1},
+        {"name": "Sleimok", "health": 105, "typ": "Gift", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Muschas", "health": 30, "typ": "Wasser", "typ2": None, "evolution_stage": 1},
+        {"name": "Austos", "health": 50, "typ": "Wasser", "typ2": "Eis", "evolution_stage": 2},
+
+        {"name": "Nebulak", "health": 30, "typ": "Geist", "typ2": "Gift", "evolution_stage": 1},
+        {"name": "Alpollo", "health": 45, "typ": "Geist", "typ2": "Gift", "evolution_stage": 2},
+        {"name": "Gengar", "health": 60, "typ": "Geist", "typ2": "Gift", "evolution_stage": 3},
+
+        {"name": "Onix", "health": 35, "typ": "Gestein", "typ2": "Boden", "evolution_stage": 1},
+
+        {"name": "Traumato", "health": 60, "typ": "Psycho", "typ2": None, "evolution_stage": 1},
+        {"name": "Hypno", "health": 85, "typ": "Psycho", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Krabby", "health": 30, "typ": "Wasser", "typ2": None, "evolution_stage": 1},
+        {"name": "Kingler", "health": 55, "typ": "Wasser", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Voltobal", "health": 40, "typ": "Elektro", "typ2": None, "evolution_stage": 1},
+        {"name": "Lektrobal", "health": 60, "typ": "Elektro", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Owei", "health": 60, "typ": "Pflanze", "typ2": "Psycho", "evolution_stage": 1},
+        {"name": "Kokowei", "health": 95, "typ": "Pflanze", "typ2": "Psycho", "evolution_stage": 2},
+
+        {"name": "Tragosso", "health": 50, "typ": "Boden", "typ2": None, "evolution_stage": 1},
+        {"name": "Knogga", "health": 60, "typ": "Boden", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Kicklee", "health": 50, "typ": "Kampf", "typ2": None, "evolution_stage": 1},
+        {"name": "Nockchan", "health": 50, "typ": "Kampf", "typ2": None, "evolution_stage": 1},
+
+        {"name": "Schlurp", "health": 90, "typ": "Normal", "typ2": None, "evolution_stage": 1},
+
+        {"name": "Smogon", "health": 40, "typ": "Gift", "typ2": None, "evolution_stage": 1},
+        {"name": "Smogmog", "health": 65, "typ": "Gift", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Rihorn", "health": 80, "typ": "Boden", "typ2": "Gestein", "evolution_stage": 1},
+        {"name": "Rizeros", "health": 105, "typ": "Boden", "typ2": "Gestein", "evolution_stage": 2},
+
+        {"name": "Chaneira", "health": 250, "typ": "Normal", "typ2": None, "evolution_stage": 1},
+
+        {"name": "Tangela", "health": 65, "typ": "Pflanze", "typ2": None, "evolution_stage": 1},
+
+        {"name": "Kangama", "health": 105, "typ": "Normal", "typ2": None, "evolution_stage": 1},
+
+        {"name": "Seeper", "health": 30, "typ": "Wasser", "typ2": None, "evolution_stage": 1},
+        {"name": "Seemon", "health": 55, "typ": "Wasser", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Goldini", "health": 45, "typ": "Wasser", "typ2": None, "evolution_stage": 1},
+        {"name": "Golking", "health": 80, "typ": "Wasser", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Sterndu", "health": 30, "typ": "Wasser", "typ2": None, "evolution_stage": 1},
+        {"name": "Starmie", "health": 60, "typ": "Wasser", "typ2": "Psycho", "evolution_stage": 2},
+
+        {"name": "Pantimos", "health": 40, "typ": "Psycho", "typ2": "Fee", "evolution_stage": 1},
+
+        {"name": "Sichlor", "health": 70, "typ": "Käfer", "typ2": "Flug", "evolution_stage": 1},
+
+        {"name": "Rossana", "health": 65, "typ": "Eis", "typ2": "Psycho", "evolution_stage": 1},
+
+        {"name": "Elektek", "health": 65, "typ": "Elektro", "typ2": None, "evolution_stage": 1},
+
+        {"name": "Magmar", "health": 65, "typ": "Feuer", "typ2": None, "evolution_stage": 1},
+
+        {"name": "Pinsir", "health": 65, "typ": "Käfer", "typ2": None, "evolution_stage": 1},
+
+        {"name": "Tauros", "health": 75, "typ": "Normal", "typ2": None, "evolution_stage": 1},
+
+        {"name": "Karpador", "health": 20, "typ": "Wasser", "typ2": None, "evolution_stage": 1},
+        {"name": "Garados", "health": 95, "typ": "Wasser", "typ2": "Flug", "evolution_stage": 2},
+
+        {"name": "Lapras", "health": 130, "typ": "Wasser", "typ2": "Eis", "evolution_stage": 1},
+
+        {"name": "Ditto", "health": 48, "typ": "Normal", "typ2": None, "evolution_stage": 1},
+
+        {"name": "Evoli", "health": 55, "typ": "Normal", "typ2": None, "evolution_stage": 1},
+        {"name": "Aquana", "health": 130, "typ": "Wasser", "typ2": None, "evolution_stage": 2},
+        {"name": "Blitza", "health": 65, "typ": "Elektro", "typ2": None, "evolution_stage": 2},
+        {"name": "Flamara", "health": 65, "typ": "Feuer", "typ2": None, "evolution_stage": 2},
+
+        {"name": "Porygon", "health": 65, "typ": "Normal", "typ2": None, "evolution_stage": 1},
+
+        {"name": "Amonitas", "health": 35, "typ": "Gestein", "typ2": "Wasser", "evolution_stage": 1},
+        {"name": "Amoroso", "health": 70, "typ": "Gestein", "typ2": "Wasser", "evolution_stage": 2},
+
+        {"name": "Kabuto", "health": 30, "typ": "Gestein", "typ2": "Wasser", "evolution_stage": 1},
+        {"name": "Kabutops", "health": 60, "typ": "Gestein", "typ2": "Wasser", "evolution_stage": 2},
+
+        {"name": "Aerodactyl", "health": 80, "typ": "Gestein", "typ2": "Flug", "evolution_stage": 1},
+
+        {"name": "Relaxo", "health": 160, "typ": "Normal", "typ2": None, "evolution_stage": 1},
+
+        {"name": "Dratini", "health": 41, "typ": "Drache", "typ2": None, "evolution_stage": 1},
+        {"name": "Dragonir", "health": 61, "typ": "Drache", "typ2": None, "evolution_stage": 2},
+        {"name": "Dragoran", "health": 91, "typ": "Drache", "typ2": "Flug", "evolution_stage": 3},
+
     ]
 
     new_pokemon = random.choice(pokemon_team)
+
+    while new_pokemon["evolution_stage"] != 1:
+        new_pokemon = random.choice(pokemon_team)
 
     box.append(new_pokemon)
 
@@ -77,6 +298,20 @@ def heal_pokemon():
 
     bag.remove(item)
 
+def random_events():
+    event = random.choice(["pokemon", "item", "nothing"])
+
+    if event == "pokemon":
+        if len(box) == 6:
+            print("\nDein Box ist voll! Du kannst kein neues Pokémon fangen.")
+            find_item()
+        find_pokemon()
+    elif event == "item":
+        find_item()
+    else:
+        print("\nEs ist nichts passiert...")
 
 # Test
+# Game logik
 starter_pokemon()
+random_events()

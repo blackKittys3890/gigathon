@@ -3,6 +3,25 @@ import random
 bag = []
 box = []
 
+def starter_pokemon():
+    starters = [
+        {"name": "Bisasam", "health": 45, "typ": "Pflanze", "typ2": "Gift"},
+        {"name": "Glumanda", "health": 39, "typ": "Feuer"},
+        {"name": "Schiggy", "health": 44, "typ": "Wasser"}
+    ]
+
+    print("Wähle dein Starter-Pokémon:")
+
+    for i, pokemon in enumerate(starters, start=1):
+        print(f"{i}. {pokemon['name']} - KP: {pokemon['health']}")
+
+    choice = int(input("\nDeine Wahl: "))
+    starter = starters[choice - 1]
+
+    box.append(starter)
+
+    print(f"\nDu hast {starter['name']} als dein Starter-Pokémon gewählt!")
+
 def find_pokemon():
     pokemon_team = [
         {"name": "Pikachu", "health": 35},
@@ -60,4 +79,4 @@ def heal_pokemon():
 
 
 # Test
-find_pokemon()
+starter_pokemon()

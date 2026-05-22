@@ -1,6 +1,7 @@
 import random
 
 bag = []
+player = {}
 box = []
 
 def starter_pokemon():
@@ -283,10 +284,10 @@ def find_item():
 
 def heal_pokemon():
     if len(bag) == 0:
-        print("\nDeine Tasche ist leer!")
+        print("\nDeine Medizintasche ist leer!")
         return
 
-    print("\nDeine Tasche:")
+    print("\nDeine Medizintasche:")
 
     for i, item in enumerate(bag, start=1):
         print(f"{i}. {item[0]} (+{item[1]} KP)")
@@ -360,11 +361,11 @@ def next_step():
 
 def friend(x):
     if x >= 5:
-        return "Rocko"
+        return "Rocko" # Findet Tränke
     elif x <= 0:
-        return "Ash"
+        return "Ash" # Findet manchmal Pokemon
     else:
-        return "Misty"
+        return "Misty" # Ist
 
 def arena():
     print("\nDu betrittst die Arena...")
@@ -391,12 +392,40 @@ def startup():
             break
         except ValueError:
             print("Bitte gib nur Zahlen ein. Neuer Versuch.")
+            
+    print("Auf welcher Schwierigkeit möchtest du spielen? (1 (leicht) -3 (schwer))")
 
+    while True:
+        try:
+            difficulty = int(input("Schwierigkeit: "))
+            if difficulty < 1 or difficulty > 3:
+                print("Bitte gib nur eine Zahl zwischen 1 und 3 ein. Neuer Versuch.")
+            else:
+                break
+        except ValueError:
+            print("Bitte gib nur Zahlen ein. Neuer Versuch.")
+            
+    print("\nMit wie viel Geld möchtest du starten?")
 
+    while True:
+        try:
+            money = int(input("Geld: "))
+            if money < 0:
+                print("Bitte gib eine positive Zahl ein. Neuer Versuch.")
+            else:
+                break
+        except ValueError:
+            print("Bitte gib nur Zahlen ein. Neuer Versuch.")
+            
+    player["geld"] = money
 
     print("Viel Spaß auf deiner Reise!\n")
+    return trainer_name
+
+def abschluss(trainer_name):
+    print(f"Danke {trainer_name} fürs Spielen!")
 
 # Test
 # Game logik
-startup()
-
+trainer_name = startup()
+abschluss(trainer_name)

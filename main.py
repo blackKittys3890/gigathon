@@ -440,124 +440,9 @@ def friend(x):
     if x >= 5:
         return "Rocko" # Fördert Eigenentscheidung
     elif x <= 0:
-        return "Ash" # Fördert Pokemons fangen
+        return "Ash"
     else:
-        return "Misty" # Fördert Items finden
-
-arena_leiter = {
-    "Rocko": [
-        {"name": "Kleinstein", "health": 40, "typ": "Gestein"},
-        {"name": "Onix", "health": 35, "typ": "Gestein"}
-    ],
-
-    "Misty": [
-        {"name": "Sterndu", "health": 30, "typ": "Wasser"},
-        {"name": "Starmie", "health": 60, "typ": "Wasser"}
-    ],
-
-    "Major Bob": [
-        {"name": "Voltobal", "health": 40, "typ": "Elektro"},
-        {"name": "Raichu", "health": 60, "typ": "Elektro"},
-        {"name": "Pikachu", "health": 35, "typ": "Elektro"}
-    ],
-
-    "Erika": [
-        {"name": "Sarazenia", "health": 45, "typ": "Pflanze"},
-        {"name": "Tangela", "health": 65, "typ": "Pflanze"},
-        {"name": "Giflor", "health": 75, "typ": "Pflanze"}
-    ],
-
-    "Koga": [
-        {"name": "Smogon", "health": 40, "typ": "Gift"},
-        {"name": "Sleimok", "health": 105, "typ": "Gift"},
-        {"name": "Smogon", "health": 40, "typ": "Gift"},
-        {"name": "Smogmog", "health": 65, "typ": "Gift"}
-    ],
-
-    "Sabrina": [
-        {"name": "Kadabra", "health": 40, "typ": "Psycho"},
-        {"name": "Pantimos", "health": 40, "typ": "Psycho"},
-        {"name": "Omot", "health": 70, "typ": "Käfer", "typ2": "Gift"},
-        {"name": "Simsala", "health": 55, "typ": "Psycho"}
-    ],
-
-    "Pyro": [
-        {"name": "Fukano", "health": 55, "typ": "Feuer"},
-        {"name": "Ponita", "health": 50, "typ": "Feuer"},
-        {"name": "Gallopa", "health": 65, "typ": "Feuer"},
-        {"name": "Arkani", "health": 90, "typ": "Feuer"},
-    ],
-
-    "Giovanni": [
-        {"name": "Onix", "health": 35, "typ": "Gestein"},
-        {"name": "Rihorn", "health": 80, "typ": "Boden"},
-        {"name": "Kangama", "health": 105, "typ": "Normal"}
-    ]
-}
-
-top4_leiter = {
-    "Lorelei": [
-        {"name": "Jugong", "health": 90, "typ": "Wasser", "typ2": "Eis"},
-        {"name": "Austos", "health": 50, "typ": "Wasser", "typ2": "Eis"},
-        {"name": "Lahmus", "health": 95, "typ": "Wasser", "typ2": "Psycho"},
-        {"name": "Rossana", "health": 65, "typ": "Eis", "typ2": "Psycho"},
-        {"name": "Lapras", "health": 130, "typ": "Wasser", "typ2": "Eis"}
-    ],
-    "Bruno": [
-        {"name": "Onix", "health": 35, "typ": "Gestein"},
-        {"name": "Nockchan", "health": 50, "typ": "Kampf"},
-        {"name": "Kicklee", "health": 50, "typ": "Kampf"},
-        {"name": "Onix", "health": 35, "typ": "Gestein"},
-        {"name": "Machomei", "health": 90, "typ": "Kampf"}
-    ],
-    "Agathe": [
-        {"name": "Gengar", "health": 60, "typ": "Geist", "typ2": "Gift"},
-        {"name": "Golbat", "health": 75, "typ": "Gift", "typ2": "Flug"},
-        {"name": "Alpollo", "health": 45, "typ": "Geist", "typ2": "Gift"},
-        {"name": "Arbok", "health": 60, "typ": "Gift"},
-        {"name": "Gengar", "health": 60, "typ": "Geist", "typ2": "Gift"}
-    ],
-    "Siegfried": [
-        {"name": "Garados", "health": 95, "typ": "Wasser", "typ2": "Flug"},
-        {"name": "Dragonir", "health": 61, "typ": "Drache"},
-        {"name": "Dragonir", "health": 61, "typ": "Drache"},
-        {"name": "Aerodactyl", "health": 80, "typ": "Gestein", "typ2": "Flug"},
-        {"name": "Dragoran", "health": 91, "typ": "Drache", "typ2": "Flug"}
-    ],
-    f"player['rival']": [
-        {"name": "Tauboss", "health": 83, "typ": "Normal", "typ2": "Flug"},
-        {"name": "Simsala", "health": 55, "typ": "Psycho"},
-        {"name": "Rizeros", "health": 105, "typ": "Boden", "typ2": "Gestein"},
-        {"name": "Kokowei", "health": 95, "typ": "Pflanze", "typ2": "Psycho"},
-        {"name": "Garados", "health": 95, "typ": "Wasser", "typ2": "Flug"},
-        {"name": "Glurak", "health": 78, "typ": "Feuer", "typ2": "Flug"}
-    ]
-}
-
-def top4():
-    print("Du betrittst die Top 4...")
-    if player["top4_badges"] == 0:
-        top4_name = "Lorelei"
-    elif player["top4_badges"] == 1:
-        top4_name = "Bruno"
-    elif player["top4_badges"] == 2:
-        top4_name = "Agathe"
-    elif player["top4_badges"] == 3:
-        top4_name = "Siegfried"
-    elif player["top4_badges"] == 4:
-        top4_name = player["rival"]
-    else:
-        print("Du hast alle Top 4 Orden erreicht. Herzlichen Glückwunsch")
-
-        
-    gegner_team = top4_leiter[top4_name]
-
-    print("\nGegnerisches Team:")
-
-    for pokemon in gegner_team:
-        print(f"- {pokemon['name']} ({pokemon['health']} KP)")
-
-
+        return "Misty"
 
 def arena():
     print("\nDu betrittst die Arena...")
@@ -585,26 +470,25 @@ def arena():
 
     gegner_team = arena_leiter[arena_name]
 
-    print("\nGegnerisches Team:")
+    print(f"\nHallo {trainer_name}!")
+    starter_pokemon()
 
-    for pokemon in gegner_team:
-        print(f"- {pokemon['name']} ({pokemon['health']} KP)")
+    print("Wo möchtest du starten? (x, y)")
+    while True:
+        try:
+            x = int(input("x: "))
+            y = int(input("y: "))
+            friend(x)
+            print(f"Dein Trainer ist {friend(x)}")
+            break
+        except ValueError:
+            print("Bitte gib nur Zahlen ein. Neuer Versuch.")
 
-def abschluss(trainer_name):
-    print("\n===== SPIELZUSAMMENFASSUNG =====")
-    
-    
-    for key, value in player.items():
-        print(f"{key}: {value}")
-    
-    print(f"Danke {trainer_name} fürs Spielen!")
-    print(f"Du hast {len(box)} Pokémon gefangen und {len(bag)} Items gesammelt.")
-    print(f"Dein Geld: {player['geld']}")
-    print(f"Du hast {player['arena_badges']} Arena Orden erreicht.")
-    print(f"Dein Rivale war {player['rival']} und dein Trainer war {player['trainer']}.")
+
+
+    print("Viel Spaß auf deiner Reise!\n")
 
 # Test
 # Game logik
-trainer_name = startup()
-arena()
-top4()
+startup()
+

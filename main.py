@@ -618,10 +618,29 @@ def top4():
         
     gegner_team = top4_leiter[top4_name]
 
-    print("\nGegnerisches Team:")
+    for enemy_pokemon in gegner_team:
 
-    for pokemon in gegner_team:
-        print(f"- {pokemon['name']} ({pokemon['health']} KP)")
+        print(f"\n{top4_name} setzt {enemy_pokemon['name']} ein!")
+
+        if len(box) == 0:
+            print("Du hast keine Pokémon!")
+            print("GAME OVER")
+            abschluss(trainer_name)
+
+        player_pokemon = box[0]
+
+        gewonnen = battle(player_pokemon, enemy_pokemon)
+
+        if not gewonnen:
+            print("\nDu hast die Arena verloren!")
+            print("GAME OVER")
+            abschluss(trainer_name)
+
+        else:
+            print(f"\nDu hast {top4_name} besiegt!")
+            print("Du erhältst einen Top 4 Orden!")
+
+    player["top4_badges"] += 1
 
 def arena():
     print("\nDu betrittst die Arena...")

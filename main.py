@@ -709,3 +709,5 @@ def abschluss(trainer_name):
 # Game logik
 trainer_name = startup()
 top4()
+
+#a

@@ -1,1 +1,3 @@
-...
+# Gigathon
+
+A Pokemon Game

@@ -13,6 +13,7 @@ def startup():
     player["top4_badges"] = 0
     player["schritt"] = 0
     player["game_over"] = False
+    player["ereignisse"] = []
 
     print("Willkommen zu Pokémon!")
     print("Du bist ein Trainer und dein Ziel ist es, der beste Pokémon-Trainer zu werden.")
@@ -114,7 +115,6 @@ def reisen():
     elif richtung == "w":
         new_x -= schritte
 
-    # Grenzen anwenden mit Ausgabe
     if new_x < MIN_X:
         new_x = MIN_X
         print(f"Grenzüberschreitung: Du kannst nicht weiter nach Westen gehen! (Grenze: x = {MIN_X})")
@@ -193,7 +193,6 @@ def battle(player_pokemon, enemy_pokemon):
             print("\nUngültige Eingabe!")
             continue
 
-        # Gegnerischer Angriff
         enemy_damage = int(random.randint(5, 12) * schaden_faktor)
         player_pokemon["health"] -= enemy_damage
         print(f"\n{enemy_pokemon['name']} macht {enemy_damage} Schaden!")
@@ -242,10 +241,10 @@ def find_pokemon():
     new_pokemon = random.choice(pokemon_team)
     box.append(new_pokemon)
     print(f"\nDu hast {new_pokemon['name']} gefangen! (+{new_pokemon['health']} KP)")
+    player["ereignisse"].append(f"Pokémon {new_pokemon['name']} gefangen")
 
 
 def legendary_pokemon():
-    """Seltene legendäre Pokémon mit höheren KP"""
     legendaries = [
         {"name": "Mewtu", "health": 106, "typ": "Psycho", "evolution_stage": 1},
         {"name": "Mew", "health": 100, "typ": "Psycho", "evolution_stage": 1},
@@ -258,6 +257,7 @@ def legendary_pokemon():
     box.append(new_pokemon)
     print(f"\n⭐ LEGENDÄRES POKÉMON! ⭐")
     print(f"Du hast {new_pokemon['name']} gefangen! (+{new_pokemon['health']} KP)")
+    player["ereignisse"].append(f"Legendäres Pokémon {new_pokemon['name']} gefangen")
 
 
 def find_item():
@@ -265,6 +265,7 @@ def find_item():
     item = random.choice(items)
     bag.append(item)
     print(f"\nDu hast {item[0]} gefunden! (+{item[1]} KP Heilung)")
+    player["ereignisse"].append(f"Item {item[0]} gefunden")
 
 
 def heal_pokemon():
@@ -301,12 +302,11 @@ def heal_pokemon():
 
 
 def random_events(friend_name):
-    # Event-Wahrscheinlichkeiten basierend auf Trainer-Typ
     if friend_name == "Misty":
         events = ["item", "item", "pokemon", "dangerous_field", "legendary"]
     elif friend_name == "Ash":
         events = ["pokemon", "pokemon", "item", "dangerous_field", "pokemon"]
-    else:  # Rocko
+    else:
         events = ["item", "pokemon", "dangerous_field", "dangerous_field", "dangerous_field"]
 
     event = random.choice(events)
@@ -331,15 +331,16 @@ def random_events(friend_name):
         
     elif event == "dangerous_field":
         print("⚠️ Du betrittst ein gefährliches Feld! Alle Pokémon verlieren 10 KP.")
+        print("Erklärung: Gefährliche Felder sind mit Dornen oder Stacheldraht übersät und verletzen deine Pokémon.")
         for pokemon in box:
             pokemon["health"] -= 10
             if pokemon["health"] < 0:
                 pokemon["health"] = 0
-            print(f"  {pokemon['name']}: {pokemon['health']} KP (Erklärung: -10 KP durch gefährliches Feld)")
+            print(f"  {pokemon['name']}: {pokemon['health']} KP")
+        player["ereignisse"].append("Gefährliches Feld betreten -10 KP für alle Pokémon")
 
 
 def next_step(trainer_name):
-    """Wird nach Arenakämpfen aufgerufen"""
     while True:
         actions_list = [
             {"name": "Pokémon heilen"},
@@ -369,18 +370,18 @@ def next_step(trainer_name):
                 print("\nDeine Box ist voll! Du kannst kein neues Pokémon fangen.")
             else:
                 find_pokemon()
-        else:  # weiter gehen
+        else:
             arena(trainer_name)
             break
 
 
 def friend(x):
     if x >= 5:
-        return "Rocko"      # Fördert gefährliche Felder
+        return "Rocko"
     elif x <= 0:
-        return "Ash"        # Fördert Pokémon fangen
+        return "Ash"
     else:
-        return "Misty"      # Fördert Items finden
+        return "Misty"
 
 
 arena_leiter = {
@@ -432,8 +433,7 @@ def top4(trainer_name):
 
         if len(box) == 0:
             print("Du hast keine Pokémon!")
-            print("GAME OVER")
-            abschluss(trainer_name)
+            print("\n💀 GAME OVER - Du hast verloren! 💀")
             player["game_over"] = True
             return False
 
@@ -441,15 +441,13 @@ def top4(trainer_name):
         gewonnen = battle(player_pokemon, enemy_pokemon)
 
         if not gewonnen:
-            print(f"\nDu hast gegen {top4_name} verloren!")
-            print("GAME OVER")
-            abschluss(trainer_name)
+            print(f"\n💀 GAME OVER - Du hast gegen {top4_name} verloren! 💀")
             player["game_over"] = True
             return False
         else:
-            print(f"\nDu hast {enemy_pokemon['name']} besiegt!")
+            print(f"\n✨ Du hast {enemy_pokemon['name']} besiegt! ✨")
 
-    print(f"\n✨ Du hast {top4_name} besiegt! ✨")
+    print(f"\n🏆 Du hast {top4_name} besiegt! 🏆")
     print("Du erhältst einen Top 4 Orden!")
     player["top4_badges"] += 1
     return True
@@ -487,8 +485,7 @@ def arena(trainer_name):
 
         if len(box) == 0:
             print("Du hast keine Pokémon!")
-            print("GAME OVER")
-            abschluss(trainer_name)
+            print("\n💀 GAME OVER - Du hast verloren! 💀")
             player["game_over"] = True
             return
 
@@ -496,19 +493,16 @@ def arena(trainer_name):
         gewonnen = battle(player_pokemon, enemy_pokemon)
 
         if not gewonnen:
-            print(f"\nDu hast gegen {arena_name} verloren!")
-            print("GAME OVER")
-            abschluss(trainer_name)
+            print(f"\n💀 GAME OVER - Du hast gegen {arena_name} verloren! 💀")
             player["game_over"] = True
             return
         else:
-            print(f"\nDu hast {enemy_pokemon['name']} besiegt!")
+            print(f"\n✨ Du hast {enemy_pokemon['name']} besiegt! ✨")
 
     print(f"\n🏆 Du hast {arena_name} besiegt! 🏆")
     print("Du erhältst einen Arenaorden!")
     player["arena_badges"] += 1
 
-    # Nach einem Arena-Sieg: Optionen zum Heilen/Fangen
     if player["arena_badges"] < 8:
         next_step(trainer_name)
 
@@ -532,8 +526,17 @@ def abschluss(trainer_name):
     print(f"\n💊 Items gesammelt: {len(bag)}")
     for item in bag:
         print(f"   - {item[0]} (+{item[1]} KP)")
+    if player.get("ereignisse"):
+        print(f"\n📋 Ereignisse während der Reise:")
+        for i, ereignis in enumerate(player["ereignisse"][-10:], 1):
+            print(f"   {i}. {ereignis}")
     print("=" * 50)
-    print(f"\nDanke fürs Spielen, {trainer_name}!")
+    
+    if player.get("top4_badges", 0) >= 5:
+        print("\n👑 HERZLICHEN GLÜCKWUNSCH! Du bist der neue Pokémon-Champion! 👑")
+    else:
+        print("\n💀 Spiel beendet - Viel Glück beim nächsten Versuch! 💀")
+    
     print("=" * 50)
 
 
@@ -546,11 +549,9 @@ if __name__ == "__main__":
         trainer_name = startup()
         game_over = False
 
-        # Hauptspiel-Schleife: 8 Arenen oder Game Over
         while player["arena_badges"] < 8 and not game_over:
             reisen()
             
-            # Geld-Limit als Endbedingung
             if player["geld"] <= 0:
                 print("\n💰 Dir ist das Geld ausgegangen! Du kannst keine Reise mehr fortsetzen.")
                 game_over = True
@@ -559,21 +560,16 @@ if __name__ == "__main__":
             if player.get("game_over"):
                 game_over = True
 
-        # Wenn alle 8 Arenen besiegt wurden, treten die Top 4 an
         if not game_over and player["arena_badges"] >= 8:
             print("\n🎉 Glückwunsch! Du hast alle 8 Arena-Orden gesammelt! 🎉")
             print("Du darfst nun gegen die Top 4 antreten!\n")
             
             while player["top4_badges"] < 5 and not player.get("game_over", False):
-                top4(trainer_name)
+                top4(trainer_name)   # ← HIER wurde trainer_name hinzugefügt!
 
-        # Abschlussbericht anzeigen (falls nicht schon geschehen)
         if player.get("game_over", False) or player["top4_badges"] >= 5:
-            if player["top4_badges"] >= 5:
-                print("\n👑 HERZLICHEN GLÜCKWUNSCH! Du bist der neue Pokémon-Champion! 👑")
             abschluss(trainer_name)
 
-        # Neustart-Abfrage
         print("\n🔄 Möchtest du nochmal spielen? (j/n)")
         again = input("Auswahl: ").strip().lower()
         if again != "j":

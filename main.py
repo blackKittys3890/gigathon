@@ -398,6 +398,19 @@ def find_pokemon():
 
     print(f"\nDu hast {new_pokemon['name']} gefangen!")
 
+def legendary_pokemon():
+    
+    pokemon_team = [
+        {"name": "Mewtu", "health": 106, "typ": "Psycho", "typ2": None, "evolution_stage": 1},
+        {"name": "Mew", "health": 100, "typ": "Psycho", "typ2": None, "evolution_stage": 1},
+        {"name": "Meltan", "health": 46, "typ": "Stahl", "typ2": None, "evolution_stage": 1},
+        {"name": "Melmetal", "health": 135, "typ": "Stahl", "typ2": None, "evolution_stage": 2},
+        {"name": "Arktos", "health": 90, "typ": "Eis", "typ2": "Flug", "evolution_stage": 1},
+        {"name": "Zapdos", "health": 90, "typ": "Elektro", "typ2": "Flug", "evolution_stage": 1},
+        {"name": "Lavados", "health": 90, "typ": "Feuer", "typ2": "Flug", "evolution_stage": 1}
+        
+    ]
+
 def find_item():
     items = [
         ("Normale Potion", 20),

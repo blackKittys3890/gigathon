@@ -9,16 +9,15 @@ MIN_Y, MAX_Y = -100, 100
 
 
 def startup():
+    global x, y
     player["arena_badges"] = 0
     player["top4_badges"] = 0
-    player["x"] = x
-    player["y"] = y
+    player["schritt"] = 0
+
     print("Willkommen zu Pokémon!")
-    print(
-        "Du bist ein Trainer und dein Ziel ist es, der beste Pokémon-Trainer zu werden."
-    )
+    print("Du bist ein Trainer und dein Ziel ist es, der beste Pokémon-Trainer zu werden.")
     print("Fange Pokémon, sammle Items und heile deine Pokémon, um stärker zu werden.")
-    print("Wenn du eine Arena nicht schaffst hast du verloren")
+    print("Wenn du eine Arena nicht schaffst, hast du verloren.")
 
     print("Bevor wir starten, wie ist dein Name?")
     trainer_name = input("Dein Name: ")
@@ -37,8 +36,7 @@ def startup():
         except ValueError:
             print("Bitte gib nur Zahlen ein. Neuer Versuch.")
 
-    print("Auf welcher Schwierigkeit möchtest du spielen? (1 (leicht) -3 (schwer))")
-
+    print("Auf welcher Schwierigkeit möchtest du spielen? (1 (leicht) - 3 (schwer))")
     while True:
         try:
             difficulty = int(input("Schwierigkeit: "))
@@ -53,7 +51,6 @@ def startup():
     rival_name = input("Name: ")
 
     print("\nMit wie viel Geld möchtest du starten?")
-
     while True:
         try:
             money = int(input("Geld: "))
@@ -66,10 +63,19 @@ def startup():
 
     player["geld"] = money
     player["name"] = trainer_name
+    player["x"] = x
+    player["y"] = y
     player["trainer"] = friend(x)
     player["difficulty"] = difficulty
     player["starter"] = starter["name"]
     player["rival"] = rival_name
+
+    print("\n=== Expeditionsstart ===")
+    print(f"Name der Expedition: {trainer_name}")
+    print(f"Startposition: ({x}, {y})")
+    print(f"Anfangsressource (Geld): {money}")
+    print(f"Grenzen der Welt: x = {MIN_X} bis {MAX_X}, y = {MIN_Y} bis {MAX_Y}")
+    print("Endbedingung: Das Spiel endet, wenn du alle Orden sammelst oder eine Arena verlierst.")
 
     print("Viel Spaß auf deiner Reise!\n")
     return trainer_name
@@ -77,10 +83,11 @@ def startup():
 def reisen():
     global MIN_X, MAX_X, MIN_Y, MAX_Y
 
-    player["schritt"] += 1  
+    player["schritt"] += 1
     print(f"\n--- Schritt {player['schritt']}: Bewegung ---")
 
     print(f"Alte Position: ({player['x']}, {player['y']})")
+    print(f"Geld: {player['geld']}")
 
     richtung = input("In welche Richtung möchtest du gehen? (N, S, O, W): ").lower()
     while richtung not in ["n", "s", "o", "w"]:
@@ -131,54 +138,12 @@ def reisen():
         print(f"{pokemon['name']}: {pokemon['health']} KP")
 
     random_events(player["trainer"])
-    global MIN_X, MAX_X, MIN_Y, MAX_Y
-
-    richtung = input("In welche Richtung möchtest du gehen? (N, S, O, W): ").lower()
-    while richtung not in ["n", "s", "o", "w"]:
-        print("Ungültige Richtung! Bitte wähle N, S, O oder W.")
-        richtung = input("In welche Richtung möchtest du gehen? (N, S, O, W): ").lower()
-
-    while True:
-        try:
-            schritte = int(input("Wie viele Schritte möchtest du gehen? "))
-            if schritte <= 0:
-                print("Bitte gib eine positive Zahl ein.")
-                continue
-            break
-        except ValueError:
-            print("Bitte gib nur Zahlen ein.")
-
-    new_x, new_y = player["x"], player["y"]
-    if richtung == "n":
-        new_y += schritte
-    elif richtung == "s":
-        new_y -= schritte
-    elif richtung == "o":
-        new_x += schritte
-    elif richtung == "w":
-        new_x -= schritte
-    if new_x < MIN_X:
-        new_x = MIN_X
-        print(f"Du kannst nicht weiter nach Westen gehen! (Grenze: x = {MIN_X})")
-    elif new_x > MAX_X:
-        new_x = MAX_X
-        print(f"Du kannst nicht weiter nach Osten gehen! (Grenze: x = {MAX_X})")
-
-    if new_y < MIN_Y:
-        new_y = MIN_Y
-        print(f"Du kannst nicht weiter nach Süden gehen! (Grenze: y = {MIN_Y})")
-    elif new_y > MAX_Y:
-        new_y = MAX_Y
-        print(f"Du kannst nicht weiter nach Norden gehen! (Grenze: y = {MAX_Y})")
-
-    player["x"], player["y"] = new_x, new_y
-    print(f"Aktuelle Position: ({player['x']}, {player['y']})")
-
-    random_events(player["trainer"])
 
 def battle(player_pokemon, enemy_pokemon):
     print(f"\n--- Schritt {player['schritt']}: Kampf gegen {enemy_pokemon['name']} ---")
-    print(f"Vor dem Kampf - {player_pokemon['name']}: {player_pokemon['health']} KP, {enemy_pokemon['name']}: {enemy_pokemon['health']} KP")
+    print(f"Vor dem Kampf:")
+    print(f"{player_pokemon['name']}: {player_pokemon['health']} KP")
+    print(f"{enemy_pokemon['name']}: {enemy_pokemon['health']} KP")
 
     while True:
         print("\n-------------------")
@@ -199,7 +164,7 @@ def battle(player_pokemon, enemy_pokemon):
 
             if enemy_pokemon["health"] <= 0:
                 print(f"{enemy_pokemon['name']} wurde besiegt!")
-                player["schritt"] += 1 
+                player["schritt"] += 1
                 return True
 
         elif choice == "2":
@@ -207,6 +172,7 @@ def battle(player_pokemon, enemy_pokemon):
                 print("\nDu hast keine Heilitems!")
             else:
                 heal_pokemon()
+                player["schritt"] += 1
 
         elif choice == "3":
             chance = random.randint(1, 100)
@@ -230,66 +196,6 @@ def battle(player_pokemon, enemy_pokemon):
             player["schritt"] += 1
             return False
 
-    print(f"Nach dem Kampf - {player_pokemon['name']}: {player_pokemon['health']} KP")
-
-    print(f"\nEin wildes {enemy_pokemon['name']} erscheint!")
-
-    while True:
-
-        print("\n-------------------")
-        print(f"{player_pokemon['name']} KP: {player_pokemon['health']}")
-        print(f"{enemy_pokemon['name']} KP: {enemy_pokemon['health']}")
-
-        print("\nWas möchtest du tun?")
-        print("1. Angreifen")
-        print("2. Heilen")
-        print("3. Fliehen")
-
-        choice = input("Auswahl: ")
-
-        if choice == "1":
-
-            damage = random.randint(8, 15)
-            enemy_pokemon["health"] -= damage
-
-            print(f"\n{player_pokemon['name']} macht " f"{damage} Schaden!")
-
-            if enemy_pokemon["health"] <= 0:
-                print(f"{enemy_pokemon['name']} wurde besiegt!")
-                return True
-
-        elif choice == "2":
-
-            if len(bag) == 0:
-                print("\nDu hast keine Heilitems!")
-
-            else:
-                heal_pokemon()
-
-        elif choice == "3":
-
-            chance = random.randint(1, 100)
-
-            if chance <= 50:
-                print("\nDu bist erfolgreich geflohen!")
-                return False
-            else:
-                print("\nFlucht fehlgeschlagen!")
-
-        else:
-            print("\nUngültige Eingabe!")
-            continue
-
-        enemy_damage = random.randint(5, 12)
-
-        player_pokemon["health"] -= enemy_damage
-
-        print(f"\n{enemy_pokemon['name']} macht " f"{enemy_damage} Schaden!")
-
-        if player_pokemon["health"] <= 0:
-            print(f"\n{player_pokemon['name']} wurde besiegt!")
-            return False
-
 def starter_pokemon():
     starters = [
         {"name": "Bisasam", "health": 45, "typ": "Pflanze", "typ2": "Gift"},
@@ -298,1064 +204,39 @@ def starter_pokemon():
     ]
 
     print("Wähle dein Starter-Pokémon:")
-
     for i, pokemon in enumerate(starters, start=1):
         print(f"{i}. {pokemon['name']} - KP: {pokemon['health']}")
 
     while True:
         try:
             choice = int(input("\nDeine Wahl (1-3): "))
-
             if choice < 1 or choice > 3:
                 print("Bitte gib nur eine Zahl zwischen 1 und 3 ein. Neuer Versuch.")
             else:
                 break
-
         except ValueError:
             print("Bitte gib nur Zahlen ein. Neuer Versuch.")
 
     starter = starters[choice - 1]
-
     box.append(starter)
     player["starter"] = starter["name"]
-
     print(f"\nDu hast {starter['name']} als dein Starter-Pokémon gewählt!")
     return starter
 
 def find_pokemon():
-
     pokemon_team = [
-        {
-            "name": "Bisasam",
-            "health": 45,
-            "typ": "Pflanze",
-            "typ2": "Gift",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Bisaknosp",
-            "health": 60,
-            "typ": "Pflanze",
-            "typ2": "Gift",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Bisaflor",
-            "health": 80,
-            "typ": "Pflanze",
-            "typ2": "Gift",
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Glumanda",
-            "health": 39,
-            "typ": "Feuer",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Glutexo",
-            "health": 58,
-            "typ": "Feuer",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Glurak",
-            "health": 78,
-            "typ": "Feuer",
-            "typ2": "Flug",
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Schiggy",
-            "health": 44,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Schillok",
-            "health": 59,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Turtok",
-            "health": 79,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Raupy",
-            "health": 45,
-            "typ": "Käfer",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Safcon",
-            "health": 50,
-            "typ": "Käfer",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Smettbo",
-            "health": 60,
-            "typ": "Käfer",
-            "typ2": "Flug",
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Hornliu",
-            "health": 40,
-            "typ": "Käfer",
-            "typ2": "Gift",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Kokuna",
-            "health": 45,
-            "typ": "Käfer",
-            "typ2": "Gift",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Bibor",
-            "health": 65,
-            "typ": "Käfer",
-            "typ2": "Gift",
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Taubsi",
-            "health": 40,
-            "typ": "Normal",
-            "typ2": "Flug",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Tauboga",
-            "health": 63,
-            "typ": "Normal",
-            "typ2": "Flug",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Tauboss",
-            "health": 83,
-            "typ": "Normal",
-            "typ2": "Flug",
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Rattfratz",
-            "health": 30,
-            "typ": "Normal",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Rattikarl",
-            "health": 55,
-            "typ": "Normal",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Habitak",
-            "health": 40,
-            "typ": "Normal",
-            "typ2": "Flug",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Ibitak",
-            "health": 65,
-            "typ": "Normal",
-            "typ2": "Flug",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Rettan",
-            "health": 35,
-            "typ": "Gift",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Arbok",
-            "health": 60,
-            "typ": "Gift",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Pikachu",
-            "health": 35,
-            "typ": "Elektro",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Raichu",
-            "health": 60,
-            "typ": "Elektro",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Sandan",
-            "health": 50,
-            "typ": "Boden",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Sandamer",
-            "health": 75,
-            "typ": "Boden",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Nidoran♀",
-            "health": 55,
-            "typ": "Gift",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Nidorina",
-            "health": 70,
-            "typ": "Gift",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Nidoqueen",
-            "health": 90,
-            "typ": "Gift",
-            "typ2": "Boden",
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Nidoran♂",
-            "health": 46,
-            "typ": "Gift",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Nidorino",
-            "health": 61,
-            "typ": "Gift",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Nidoking",
-            "health": 81,
-            "typ": "Gift",
-            "typ2": "Boden",
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Piepi",
-            "health": 70,
-            "typ": "Fee",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Pixi",
-            "health": 95,
-            "typ": "Fee",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Vulpix",
-            "health": 38,
-            "typ": "Feuer",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Vulnona",
-            "health": 73,
-            "typ": "Feuer",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Pummeluff",
-            "health": 115,
-            "typ": "Normal",
-            "typ2": "Fee",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Knuddeluff",
-            "health": 140,
-            "typ": "Normal",
-            "typ2": "Fee",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Zubat",
-            "health": 40,
-            "typ": "Gift",
-            "typ2": "Flug",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Golbat",
-            "health": 75,
-            "typ": "Gift",
-            "typ2": "Flug",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Myrapla",
-            "health": 45,
-            "typ": "Pflanze",
-            "typ2": "Gift",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Duflor",
-            "health": 60,
-            "typ": "Pflanze",
-            "typ2": "Gift",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Giflor",
-            "health": 75,
-            "typ": "Pflanze",
-            "typ2": "Gift",
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Paras",
-            "health": 35,
-            "typ": "Käfer",
-            "typ2": "Pflanze",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Parasek",
-            "health": 60,
-            "typ": "Käfer",
-            "typ2": "Pflanze",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Bluzuk",
-            "health": 60,
-            "typ": "Käfer",
-            "typ2": "Gift",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Omot",
-            "health": 70,
-            "typ": "Käfer",
-            "typ2": "Gift",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Digda",
-            "health": 10,
-            "typ": "Boden",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Digdri",
-            "health": 35,
-            "typ": "Boden",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Mauzi",
-            "health": 40,
-            "typ": "Normal",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Snobilikat",
-            "health": 65,
-            "typ": "Normal",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Enton",
-            "health": 50,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Entoron",
-            "health": 80,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Menki",
-            "health": 40,
-            "typ": "Kampf",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Rasaff",
-            "health": 65,
-            "typ": "Kampf",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Fukano",
-            "health": 55,
-            "typ": "Feuer",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Arkani",
-            "health": 90,
-            "typ": "Feuer",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Quapsel",
-            "health": 40,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Quaputzi",
-            "health": 65,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Quappo",
-            "health": 90,
-            "typ": "Wasser",
-            "typ2": "Kampf",
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Abra",
-            "health": 25,
-            "typ": "Psycho",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Kadabra",
-            "health": 40,
-            "typ": "Psycho",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Simsala",
-            "health": 55,
-            "typ": "Psycho",
-            "typ2": None,
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Machollo",
-            "health": 70,
-            "typ": "Kampf",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Maschock",
-            "health": 80,
-            "typ": "Kampf",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Machomei",
-            "health": 90,
-            "typ": "Kampf",
-            "typ2": None,
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Knofensa",
-            "health": 50,
-            "typ": "Pflanze",
-            "typ2": "Gift",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Ultrigaria",
-            "health": 65,
-            "typ": "Pflanze",
-            "typ2": "Gift",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Sarzenia",
-            "health": 80,
-            "typ": "Pflanze",
-            "typ2": "Gift",
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Tentacha",
-            "health": 40,
-            "typ": "Wasser",
-            "typ2": "Gift",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Tentoxa",
-            "health": 80,
-            "typ": "Wasser",
-            "typ2": "Gift",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Kleinstein",
-            "health": 40,
-            "typ": "Gestein",
-            "typ2": "Boden",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Georok",
-            "health": 55,
-            "typ": "Gestein",
-            "typ2": "Boden",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Geowaz",
-            "health": 80,
-            "typ": "Gestein",
-            "typ2": "Boden",
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Ponita",
-            "health": 50,
-            "typ": "Feuer",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Gallopa",
-            "health": 65,
-            "typ": "Feuer",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Flegmon",
-            "health": 90,
-            "typ": "Wasser",
-            "typ2": "Psycho",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Lahmus",
-            "health": 95,
-            "typ": "Wasser",
-            "typ2": "Psycho",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Magnetilo",
-            "health": 25,
-            "typ": "Elektro",
-            "typ2": "Stahl",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Magneton",
-            "health": 50,
-            "typ": "Elektro",
-            "typ2": "Stahl",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Porenta",
-            "health": 52,
-            "typ": "Normal",
-            "typ2": "Flug",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Dodu",
-            "health": 35,
-            "typ": "Normal",
-            "typ2": "Flug",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Dodri",
-            "health": 60,
-            "typ": "Normal",
-            "typ2": "Flug",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Jurob",
-            "health": 65,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Jugong",
-            "health": 90,
-            "typ": "Wasser",
-            "typ2": "Eis",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Sleima",
-            "health": 80,
-            "typ": "Gift",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Sleimok",
-            "health": 105,
-            "typ": "Gift",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Muschas",
-            "health": 30,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Austos",
-            "health": 50,
-            "typ": "Wasser",
-            "typ2": "Eis",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Nebulak",
-            "health": 30,
-            "typ": "Geist",
-            "typ2": "Gift",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Alpollo",
-            "health": 45,
-            "typ": "Geist",
-            "typ2": "Gift",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Gengar",
-            "health": 60,
-            "typ": "Geist",
-            "typ2": "Gift",
-            "evolution_stage": 3,
-        },
-        {
-            "name": "Onix",
-            "health": 35,
-            "typ": "Gestein",
-            "typ2": "Boden",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Traumato",
-            "health": 60,
-            "typ": "Psycho",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Hypno",
-            "health": 85,
-            "typ": "Psycho",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Krabby",
-            "health": 30,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Kingler",
-            "health": 55,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Voltobal",
-            "health": 40,
-            "typ": "Elektro",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Lektrobal",
-            "health": 60,
-            "typ": "Elektro",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Owei",
-            "health": 60,
-            "typ": "Pflanze",
-            "typ2": "Psycho",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Kokowei",
-            "health": 95,
-            "typ": "Pflanze",
-            "typ2": "Psycho",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Tragosso",
-            "health": 50,
-            "typ": "Boden",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Knogga",
-            "health": 60,
-            "typ": "Boden",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Kicklee",
-            "health": 50,
-            "typ": "Kampf",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Nockchan",
-            "health": 50,
-            "typ": "Kampf",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Schlurp",
-            "health": 90,
-            "typ": "Normal",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Smogon",
-            "health": 40,
-            "typ": "Gift",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Smogmog",
-            "health": 65,
-            "typ": "Gift",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Rihorn",
-            "health": 80,
-            "typ": "Boden",
-            "typ2": "Gestein",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Rizeros",
-            "health": 105,
-            "typ": "Boden",
-            "typ2": "Gestein",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Chaneira",
-            "health": 250,
-            "typ": "Normal",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Tangela",
-            "health": 65,
-            "typ": "Pflanze",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Kangama",
-            "health": 105,
-            "typ": "Normal",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Seeper",
-            "health": 30,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Seemon",
-            "health": 55,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Goldini",
-            "health": 45,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Golking",
-            "health": 80,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Sterndu",
-            "health": 30,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Starmie",
-            "health": 60,
-            "typ": "Wasser",
-            "typ2": "Psycho",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Pantimos",
-            "health": 40,
-            "typ": "Psycho",
-            "typ2": "Fee",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Sichlor",
-            "health": 70,
-            "typ": "Käfer",
-            "typ2": "Flug",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Rossana",
-            "health": 65,
-            "typ": "Eis",
-            "typ2": "Psycho",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Elektek",
-            "health": 65,
-            "typ": "Elektro",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Magmar",
-            "health": 65,
-            "typ": "Feuer",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Pinsir",
-            "health": 65,
-            "typ": "Käfer",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Tauros",
-            "health": 75,
-            "typ": "Normal",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Karpador",
-            "health": 20,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Garados",
-            "health": 95,
-            "typ": "Wasser",
-            "typ2": "Flug",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Lapras",
-            "health": 130,
-            "typ": "Wasser",
-            "typ2": "Eis",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Ditto",
-            "health": 48,
-            "typ": "Normal",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Evoli",
-            "health": 55,
-            "typ": "Normal",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Aquana",
-            "health": 130,
-            "typ": "Wasser",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Blitza",
-            "health": 65,
-            "typ": "Elektro",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Flamara",
-            "health": 65,
-            "typ": "Feuer",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Porygon",
-            "health": 65,
-            "typ": "Normal",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Amonitas",
-            "health": 35,
-            "typ": "Gestein",
-            "typ2": "Wasser",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Amoroso",
-            "health": 70,
-            "typ": "Gestein",
-            "typ2": "Wasser",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Kabuto",
-            "health": 30,
-            "typ": "Gestein",
-            "typ2": "Wasser",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Kabutops",
-            "health": 60,
-            "typ": "Gestein",
-            "typ2": "Wasser",
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Aerodactyl",
-            "health": 80,
-            "typ": "Gestein",
-            "typ2": "Flug",
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Relaxo",
-            "health": 160,
-            "typ": "Normal",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Dratini",
-            "health": 41,
-            "typ": "Drache",
-            "typ2": None,
-            "evolution_stage": 1,
-        },
-        {
-            "name": "Dragonir",
-            "health": 61,
-            "typ": "Drache",
-            "typ2": None,
-            "evolution_stage": 2,
-        },
-        {
-            "name": "Dragoran",
-            "health": 91,
-            "typ": "Drache",
-            "typ2": "Flug",
-            "evolution_stage": 3,
-        },
+        {"name": "Bisasam", "health": 45, "typ": "Pflanze", "typ2": "Gift", "evolution_stage": 1},
+        {"name": "Glumanda", "health": 39, "typ": "Feuer", "typ2": None, "evolution_stage": 1},
+        {"name": "Schiggy", "health": 44, "typ": "Wasser", "typ2": None, "evolution_stage": 1},
+        {"name": "Raupy", "health": 45, "typ": "Käfer", "typ2": None, "evolution_stage": 1},
+        {"name": "Pikachu", "health": 35, "typ": "Elektro", "typ2": None, "evolution_stage": 1},
     ]
 
     new_pokemon = random.choice(pokemon_team)
-
     while new_pokemon["evolution_stage"] != 1:
         new_pokemon = random.choice(pokemon_team)
 
     box.append(new_pokemon)
-
     print(f"\nDu hast {new_pokemon['name']} gefangen!")
 
 def legendary_pokemon():
@@ -1451,6 +332,34 @@ def heal_pokemon():
     bag.remove(item)
 
 def random_events(friend_name):
+    if friend_name == "Misty":
+        events = ["item", "item", "pokemon", "dangerous_field"]
+    elif friend_name == "Ash":
+        events = ["pokemon", "pokemon", "item", "dangerous_field"]
+    else:  # Rocko
+        events = ["item", "pokemon", "dangerous_field", "dangerous_field"]
+
+    event = random.choice(events)
+
+    if event == "pokemon":
+        if len(box) == 6:
+            print("\nDeine Box ist voll! Du kannst kein neues Pokémon fangen.")
+            find_item()
+        else:
+            find_pokemon()
+
+    elif event == "item":
+        find_item()
+
+    elif event == "dangerous_field":
+        print(f"\n--- Schritt {player['schritt']}: Gefährliches Feld ---")
+        print("Du betrittst ein gefährliches Feld! Alle Pokémon verlieren 10 KP.")
+        for pokemon in box:
+            pokemon["health"] -= 10
+            if pokemon["health"] < 0:
+                pokemon["health"] = 0
+            print(f"{pokemon['name']}: {pokemon['health']} KP (Erklärung: -10 KP durch gefährliches Feld)")
+        player["schritt"] += 1
 
     if friend_name == "Misty":
         events = ["item", "item", "pokemon", "self"]
@@ -1593,7 +502,7 @@ top4_leiter = {
         {"name": "Aerodactyl", "health": 80, "typ": "Gestein", "typ2": "Flug"},
         {"name": "Dragoran", "health": 91, "typ": "Drache", "typ2": "Flug"},
     ],
-    f"player['rival']": [
+    "rival_placeholder": [
         {"name": "Tauboss", "health": 83, "typ": "Normal", "typ2": "Flug"},
         {"name": "Simsala", "health": 55, "typ": "Psycho"},
         {"name": "Rizeros", "health": 105, "typ": "Boden", "typ2": "Gestein"},
@@ -1618,7 +527,10 @@ def top4():
     else:
         print("Du hast alle Top 4 Orden erreicht. Herzlichen Glückwunsch")
 
-    gegner_team = top4_leiter[top4_name]
+    if top4_name == player["rival"]:
+        gegner_team = top4_leiter["rival_placeholder"]
+    else:
+        gegner_team = top4_leiter[top4_name]
 
     for enemy_pokemon in gegner_team:
 
@@ -1637,6 +549,8 @@ def top4():
             print("\nDu hast die Arena verloren!")
             print("GAME OVER")
             abschluss(trainer_name)
+            player["game_over"] = True  # <-- neu
+            return
 
         else:
             print(f"\nDu hast {top4_name} besiegt!")
@@ -1687,6 +601,8 @@ def arena():
             print("\nDu hast die Arena verloren!")
             print("GAME OVER")
             abschluss(trainer_name)
+            player["game_over"] = True  # <-- neu
+            return
 
         else:
             print(f"\nDu hast {arena_name} besiegt!")
@@ -1708,7 +624,27 @@ def abschluss(trainer_name):
         f"Dein Rivale war {player['rival']} und dein Trainer war {player['trainer']}."
     )
 
-# Test
-# Game logik
-trainer_name = startup()
-top4()
+if __name__ == "__main__":
+    while True:
+        bag.clear()
+        box.clear()
+        player.clear()
+        player["schritte"] = 0
+
+        trainer_name = startup()
+
+        game_over = False  # <-- neu
+
+        while player["arena_badges"] < 8 and not game_over:
+            reisen()
+            if player.get("game_over"):  # <-- prüfen
+                game_over = True
+
+        if not game_over:
+            top4()
+
+        print("\nMöchtest du nochmal spielen? (j/n)")
+        again = input("Auswahl: ").strip().lower()
+        if again != "j":
+            print("Danke fürs Spielen! Auf Wiedersehen!")
+            break

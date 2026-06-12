@@ -6,20 +6,20 @@ Ein textbasiertes Pokemon-Adventure in Python, bei dem du als Trainer durch eine
 Du wirst nach folgenden Startparametern gefragt:
 - Dein Trainername
 - Deine Startposition (x, y) zwischen -100 und 100
-- Schwiriegkeitsgrad (1 = leicht, 2 = mittel, 3 = schwer)
+- Schwierigkeitsgrad (1 = leicht, 2 = mittel, 3 = schwer)
 - Name deines Rivalen
 - Dein Startgeld
 
 ## Spielwelt
-- Weltgrenzen: **-100 bis 100** in x- uznd y.Richtung
+- Weltgrenzen: **-100 bis 100** in x- und y-Richtung
 - Deine Position wird nach jedem Schritt aktualisiert
-- Bei jedem Schritt passiert ein Zuffallsereigniss
+- Bei jedem Schritt passiert ein Zufallsereignis
 
 ## Kampfsystem
-- Du kmäpfst mit deinem ersten Pokemon im Team
-- Optionen: Angreifen, Heilen (mit ITems, Fliehen)
+- Du kämpfst mit deinem ersten Pokemon im Team
+- Optionen: Angreifen, Heilen (mit Items), Fliehen
 - Der Schaden des Gegners skaliert mit dem Schwierigkeitsgrad:
-    - Leicht: 0.75-facher Schaden
+    - Leicht: 0,75-facher Schaden
     - Normal: 1,0-facher Schaden
     - Schwer: 1,5-facher Schaden
 
@@ -45,21 +45,22 @@ Nach allen 8 Arenen kämpfst du gegen die Top 4:
 2. Bruno
 3. Agathe
 4. Siegfried
-5. Dein Rival
+5. Dein Rivale
 
 ## Zufallsereignisse
 Dein Kumpel (abhängig von deiner Startposition) beeinflusst die Event-Wahrscheinlichkeiten:
 
-    Trainer:    Bevorzugte Events:
-    Rocko       Gefährliche Felder
-    Ash         Pokémon fangen
-    Misty       Items finden
+| Trainer | Bevorzugte Events |
+|---------|-------------------|
+| Rocko | Gefährliche Felder |
+| Ash | Pokémon fangen |
+| Misty | Items finden |
 
 ### Mögliche Events:
 - Pokemon finden - Ein wildes Pokemon fangen
 - Legendäres Pokemon - Seltenes, starkes Pokemon
 - Item finden - Potions für Heilung
-- Gefährliches Feld - Alle Pokemon verlieren 10KP
+- Gefährliches Feld - Alle Pokemon verlieren 10 KP
 
 ## Geld
 - Startgeld wird am Anfang festgelegt
@@ -70,20 +71,20 @@ Dein Kumpel (abhängig von deiner Startposition) beeinflusst die Event-Wahrschei
 Das Spiel endet wenn:
 - Du eine Arena oder Top 4 verlierst
 - Dir das Geld ausgeht
-- Du alle Top 4 (inklusive Rivalen) besiegst -> Champion!
+- Du alle Top 4 (inklusive Rivalen) besiegst → Champion!
 
 Danach wird ein ausführlicher Abschlussbericht angezeigt mit:
 - Endposition
 - Verbleibendes Geld
-- Zurückgelgte Schritte
+- Zurückgelegte Schritte
 - Arenasiege
 - Top 4 Siege
 - Dein Pokemon-Team
-- Gesammeltes Items
+- Gesammelte Items
 - Ereignis-Log
 
 ## Neustart
-Nach Spielende kannst du mit j (ja) oder n (nein) entscheiden, ob du nochmal spielen möchtest
+Nach Spielende kannst du mit **j** (ja) oder **n** (nein) entscheiden, ob du nochmal spielen möchtest.
 
 ## Autor
 Entwickelt von black_Kittys (Eliah Weichert) im Rahmen der Gigathon-Aufgabe

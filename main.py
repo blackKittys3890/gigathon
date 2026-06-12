@@ -4,6 +4,134 @@ bag = []
 player = {}
 box = []
 
+def startup():
+    player["arena_badges"] = 0
+    player["top4_badges"] = 0
+    print("Willkommen zu Pokémon!")
+    print("Du bist ein Trainer und dein Ziel ist es, der beste Pokémon-Trainer zu werden.")
+    print("Fange Pokémon, sammle Items und heile deine Pokémon, um stärker zu werden.")
+    print("Wenn du eine Arena nicht schaffst hast du verloren")
+
+    print("Bevor wir starten, wie ist dein Name?")
+    trainer_name = input("Dein Name: ")
+
+    print(f"\nHallo {trainer_name}!")
+    starter = starter_pokemon()
+
+    print("Wo möchtest du starten? (x, y)")
+    while True:
+        try:
+            x = int(input("x: "))
+            y = int(input("y: "))
+            friend(x)
+            print(f"Dein Trainer ist {friend(x)}")
+            break
+        except ValueError:
+            print("Bitte gib nur Zahlen ein. Neuer Versuch.")
+            
+    print("Auf welcher Schwierigkeit möchtest du spielen? (1 (leicht) -3 (schwer))")
+    
+    while True:
+        try:
+            difficulty = int(input("Schwierigkeit: "))
+            if difficulty < 1 or difficulty > 3:
+                print("Bitte gib nur eine Zahl zwischen 1 und 3 ein. Neuer Versuch.")
+            else:
+                break
+        except ValueError:
+            print("Bitte gib nur Zahlen ein. Neuer Versuch.")
+            
+    print("Wie soll dein Rivale heißen?")
+    rival_name = input("Name: ")
+
+    print("\nMit wie viel Geld möchtest du starten?")
+
+    while True:
+        try:
+            money = int(input("Geld: "))
+            if money < 0:
+                print("Bitte gib eine positive Zahl ein. Neuer Versuch.")
+            else:
+                break
+        except ValueError:
+            print("Bitte gib nur Zahlen ein. Neuer Versuch.")
+            
+    player["geld"] = money
+    player["name"] = trainer_name
+    player["trainer"] = friend(x)
+    player["difficulty"] = difficulty
+    player["starter"] = starter["name"]
+    player["rival"] = rival_name
+
+    print("Viel Spaß auf deiner Reise!\n")
+    return trainer_name
+
+def battle(player_pokemon, enemy_pokemon):
+
+    print(f"\nEin wildes {enemy_pokemon['name']} erscheint!")
+
+    while True:
+
+        print("\n-------------------")
+        print(f"{player_pokemon['name']} KP: {player_pokemon['health']}")
+        print(f"{enemy_pokemon['name']} KP: {enemy_pokemon['health']}")
+
+        print("\nWas möchtest du tun?")
+        print("1. Angreifen")
+        print("2. Heilen")
+        print("3. Fliehen")
+
+        choice = input("Auswahl: ")
+
+        if choice == "1":
+
+            damage = random.randint(8, 15)
+            enemy_pokemon["health"] -= damage
+
+            print(
+                f"\n{player_pokemon['name']} macht "
+                f"{damage} Schaden!"
+            )
+
+            if enemy_pokemon["health"] <= 0:
+                print(f"{enemy_pokemon['name']} wurde besiegt!")
+                return True
+
+        elif choice == "2":
+
+            if len(bag) == 0:
+                print("\nDu hast keine Heilitems!")
+
+            else:
+                heal_pokemon()
+
+        elif choice == "3":
+
+            chance = random.randint(1, 100)
+
+            if chance <= 50:
+                print("\nDu bist erfolgreich geflohen!")
+                return False
+            else:
+                print("\nFlucht fehlgeschlagen!")
+
+        else:
+            print("\nUngültige Eingabe!")
+            continue
+
+        enemy_damage = random.randint(5, 12)
+
+        player_pokemon["health"] -= enemy_damage
+
+        print(
+            f"\n{enemy_pokemon['name']} macht "
+            f"{enemy_damage} Schaden!"
+        )
+
+        if player_pokemon["health"] <= 0:
+            print(f"\n{player_pokemon['name']} wurde besiegt!")
+            return False
+
 def starter_pokemon():
     starters = [
         {"name": "Bisasam", "health": 45, "typ": "Pflanze", "typ2": "Gift"},
@@ -382,66 +510,187 @@ def friend(x):
     else:
         return "Misty" # Fördert Items finden
 
+arena_leiter = {
+    "Rocko": [
+        {"name": "Kleinstein", "health": 40, "typ": "Gestein"},
+        {"name": "Onix", "health": 35, "typ": "Gestein"}
+    ],
+
+    "Misty": [
+        {"name": "Sterndu", "health": 30, "typ": "Wasser"},
+        {"name": "Starmie", "health": 60, "typ": "Wasser"}
+    ],
+
+    "Major Bob": [
+        {"name": "Voltobal", "health": 40, "typ": "Elektro"},
+        {"name": "Raichu", "health": 60, "typ": "Elektro"},
+        {"name": "Pikachu", "health": 35, "typ": "Elektro"}
+    ],
+
+    "Erika": [
+        {"name": "Sarazenia", "health": 45, "typ": "Pflanze"},
+        {"name": "Tangela", "health": 65, "typ": "Pflanze"},
+        {"name": "Giflor", "health": 75, "typ": "Pflanze"}
+    ],
+
+    "Koga": [
+        {"name": "Smogon", "health": 40, "typ": "Gift"},
+        {"name": "Sleimok", "health": 105, "typ": "Gift"},
+        {"name": "Smogon", "health": 40, "typ": "Gift"},
+        {"name": "Smogmog", "health": 65, "typ": "Gift"}
+    ],
+
+    "Sabrina": [
+        {"name": "Kadabra", "health": 40, "typ": "Psycho"},
+        {"name": "Pantimos", "health": 40, "typ": "Psycho"},
+        {"name": "Omot", "health": 70, "typ": "Käfer", "typ2": "Gift"},
+        {"name": "Simsala", "health": 55, "typ": "Psycho"}
+    ],
+
+    "Pyro": [
+        {"name": "Fukano", "health": 55, "typ": "Feuer"},
+        {"name": "Ponita", "health": 50, "typ": "Feuer"},
+        {"name": "Gallopa", "health": 65, "typ": "Feuer"},
+        {"name": "Arkani", "health": 90, "typ": "Feuer"},
+    ],
+
+    "Giovanni": [
+        {"name": "Onix", "health": 35, "typ": "Gestein"},
+        {"name": "Rihorn", "health": 80, "typ": "Boden"},
+        {"name": "Kangama", "health": 105, "typ": "Normal"}
+    ]
+}
+
+top4_leiter = {
+    "Lorelei": [
+        {"name": "Jugong", "health": 90, "typ": "Wasser", "typ2": "Eis"},
+        {"name": "Austos", "health": 50, "typ": "Wasser", "typ2": "Eis"},
+        {"name": "Lahmus", "health": 95, "typ": "Wasser", "typ2": "Psycho"},
+        {"name": "Rossana", "health": 65, "typ": "Eis", "typ2": "Psycho"},
+        {"name": "Lapras", "health": 130, "typ": "Wasser", "typ2": "Eis"}
+    ],
+    "Bruno": [
+        {"name": "Onix", "health": 35, "typ": "Gestein"},
+        {"name": "Nockchan", "health": 50, "typ": "Kampf"},
+        {"name": "Kicklee", "health": 50, "typ": "Kampf"},
+        {"name": "Onix", "health": 35, "typ": "Gestein"},
+        {"name": "Machomei", "health": 90, "typ": "Kampf"}
+    ],
+    "Agathe": [
+        {"name": "Gengar", "health": 60, "typ": "Geist", "typ2": "Gift"},
+        {"name": "Golbat", "health": 75, "typ": "Gift", "typ2": "Flug"},
+        {"name": "Alpollo", "health": 45, "typ": "Geist", "typ2": "Gift"},
+        {"name": "Arbok", "health": 60, "typ": "Gift"},
+        {"name": "Gengar", "health": 60, "typ": "Geist", "typ2": "Gift"}
+    ],
+    "Siegfried": [
+        {"name": "Garados", "health": 95, "typ": "Wasser", "typ2": "Flug"},
+        {"name": "Dragonir", "health": 61, "typ": "Drache"},
+        {"name": "Dragonir", "health": 61, "typ": "Drache"},
+        {"name": "Aerodactyl", "health": 80, "typ": "Gestein", "typ2": "Flug"},
+        {"name": "Dragoran", "health": 91, "typ": "Drache", "typ2": "Flug"}
+    ],
+    f"player['rival']": [
+        {"name": "Tauboss", "health": 83, "typ": "Normal", "typ2": "Flug"},
+        {"name": "Simsala", "health": 55, "typ": "Psycho"},
+        {"name": "Rizeros", "health": 105, "typ": "Boden", "typ2": "Gestein"},
+        {"name": "Kokowei", "health": 95, "typ": "Pflanze", "typ2": "Psycho"},
+        {"name": "Garados", "health": 95, "typ": "Wasser", "typ2": "Flug"},
+        {"name": "Glurak", "health": 78, "typ": "Feuer", "typ2": "Flug"}
+    ]
+}
+
+def top4():
+    print("Du betrittst die Top 4...")
+    if player["top4_badges"] == 0:
+        top4_name = "Lorelei"
+    elif player["top4_badges"] == 1:
+        top4_name = "Bruno"
+    elif player["top4_badges"] == 2:
+        top4_name = "Agathe"
+    elif player["top4_badges"] == 3:
+        top4_name = "Siegfried"
+    elif player["top4_badges"] == 4:
+        top4_name = player["rival"]
+    else:
+        print("Du hast alle Top 4 Orden erreicht. Herzlichen Glückwunsch")
+
+        
+    gegner_team = top4_leiter[top4_name]
+
+    for enemy_pokemon in gegner_team:
+
+        print(f"\n{top4_name} setzt {enemy_pokemon['name']} ein!")
+
+        if len(box) == 0:
+            print("Du hast keine Pokémon!")
+            print("GAME OVER")
+            abschluss(trainer_name)
+
+        player_pokemon = box[0]
+
+        gewonnen = battle(player_pokemon, enemy_pokemon)
+
+        if not gewonnen:
+            print("\nDu hast die Arena verloren!")
+            print("GAME OVER")
+            abschluss(trainer_name)
+
+        else:
+            print(f"\nDu hast {top4_name} besiegt!")
+            print("Du erhältst einen Top 4 Orden!")
+
+    player["top4_badges"] += 1
+
 def arena():
     print("\nDu betrittst die Arena...")
 
-def startup():
-    print("Willkommen zu Pokémon!")
-    print("Du bist ein Trainer und dein Ziel ist es, der beste Pokémon-Trainer zu werden.")
-    print("Fange Pokémon, sammle Items und heile deine Pokémon, um stärker zu werden.")
-    print("Wenn du eine Arena nicht schaffst hast du verloren")
+    if player["arena_badges"] == 0:
+        arena_name = "Rocko"
+    elif player["arena_badges"] == 1:
+        arena_name = "Misty"
+    elif player["arena_badges"] == 2:
+        arena_name = "Major Bob"
+    elif player["arena_badges"] == 3:
+        arena_name = "Erika"
+    elif player["arena_badges"] == 4:
+        arena_name = "Koga"
+    elif player["arena_badges"] == 5:
+        arena_name = "Sabrina"
+    elif player["arena_badges"] == 6:
+        arena_name = "Pyro"
+    elif player["arena_badges"] == 7:
+        arena_name = "Giovanni"
+    else:
+        print("Du hast alle Arena Orden erreicht. Herzlichen Glückwunsch")
 
-    print("Bevor wir starten, wie ist dein Name?")
-    trainer_name = input("Dein Name: ")
+    print(f"{arena_name} fordert dich heraus!")
 
-    print(f"\nHallo {trainer_name}!")
-    starter_pokemon()
+    gegner_team = arena_leiter[arena_name]
 
-    print("Wo möchtest du starten? (x, y)")
-    while True:
-        try:
-            x = int(input("x: "))
-            y = int(input("y: "))
-            friend(x)
-            print(f"Dein Trainer ist {friend(x)}")
-            break
-        except ValueError:
-            print("Bitte gib nur Zahlen ein. Neuer Versuch.")
-            
-    print("Auf welcher Schwierigkeit möchtest du spielen? (1 (leicht) -3 (schwer))")
+    for enemy_pokemon in gegner_team:
 
-    while True:
-        try:
-            difficulty = int(input("Schwierigkeit: "))
-            if difficulty < 1 or difficulty > 3:
-                print("Bitte gib nur eine Zahl zwischen 1 und 3 ein. Neuer Versuch.")
-            else:
-                break
-        except ValueError:
-            print("Bitte gib nur Zahlen ein. Neuer Versuch.")
-            
-    print("\nMit wie viel Geld möchtest du starten?")
+        print(f"\n{arena_name} setzt {enemy_pokemon['name']} ein!")
 
-    while True:
-        try:
-            money = int(input("Geld: "))
-            if money < 0:
-                print("Bitte gib eine positive Zahl ein. Neuer Versuch.")
-            else:
-                break
-        except ValueError:
-            print("Bitte gib nur Zahlen ein. Neuer Versuch.")
-            
-    player["geld"] = money
-    player["name"] = trainer_name
-    player["trainer"] = friend(x)
-    player["difficulty"] = difficulty
-    starter = starter_pokemon()
-    player["starter"] = starter["name"]
-    player["arena_badges"] = 3
+        if len(box) == 0:
+            print("Du hast keine Pokémon!")
+            print("GAME OVER")
+            abschluss(trainer_name)
 
-    print("Viel Spaß auf deiner Reise!\n")
-    return trainer_name
+        player_pokemon = box[0]
+
+        gewonnen = battle(player_pokemon, enemy_pokemon)
+
+        if not gewonnen:
+            print("\nDu hast die Arena verloren!")
+            print("GAME OVER")
+            abschluss(trainer_name)
+
+        else:
+            print(f"\nDu hast {arena_name} besiegt!")
+            print("Du erhältst einen Arenaorden!")
+
+    player["arena_badges"] += 1
 
 def abschluss(trainer_name):
     print("\n===== SPIELZUSAMMENFASSUNG =====")
@@ -453,8 +702,12 @@ def abschluss(trainer_name):
     print(f"Danke {trainer_name} fürs Spielen!")
     print(f"Du hast {len(box)} Pokémon gefangen und {len(bag)} Items gesammelt.")
     print(f"Dein Geld: {player['geld']}")
+    print(f"Du hast {player['arena_badges']} Arena Orden erreicht.")
+    print(f"Dein Rivale war {player['rival']} und dein Trainer war {player['trainer']}.")
 
 # Test
 # Game logik
 trainer_name = startup()
-abschluss(trainer_name)
+top4()
+
+#a
